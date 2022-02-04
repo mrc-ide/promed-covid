@@ -1,0 +1,10 @@
+script: script.R
+
+packages:
+- dplyr
+- glue
+- purrr
+
+artefacts:
+
+depends:

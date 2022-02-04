@@ -1,0 +1,53 @@
+script: script.R
+
+packages:
+- dplyr
+- glue
+- janitor
+- purrr
+- readxl
+- snakecase
+
+artefacts:
+  data:
+    description: Very lightly processed data
+    filenames:
+      - promed_importations.rds
+      - promed_deaths.rds
+      - promed_china.rds
+      - promed_thailand.rds
+      - promed_japan.rds
+      - promed_singapore.rds
+      - promed_southKorea.rds
+      - promed_unitedStates.rds
+      - promed_vietnam.rds
+      - promed_taiwan.rds
+      - promed_hongKong.rds
+      - promed_australia.rds
+      - promed_nepal.rds
+      - promed_france.rds
+      - promed_malaysia.rds
+      - promed_canada.rds
+      - promed_sriLanka.rds
+      - promed_pakistan.rds
+      - promed_cambodia.rds
+      - promed_germany.rds
+      - promed_uae.rds
+      - promed_finland.rds
+      - promed_philippines.rds
+      - promed_russia.rds
+      - promed_mexico.rds
+      - promed_unitedKingdom.rds
+      - promed_italy.rds
+      - promed_india.rds
+      - promed_newZealand.rds
+      - promed_spain.rds
+      - promed_sweden.rds
+      - promed_sudan.rds
+      - promed_mauritius.rds
+      - promed_angola.rds
+      - promed_belgium.rds      
+
+resources:
+- promed-covid-data.xlsx
+## File not on github yet
