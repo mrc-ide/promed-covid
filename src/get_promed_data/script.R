@@ -1,13 +1,13 @@
 ## orderly::orderly_develop_start()
+## TODO. Edit this to fetch it directly from gdrive
 infile <- "promed-covid-data.xlsx"
 sheets <- excel_sheets(infile)
 names(sheets) <- to_lower_camel_case(sheets)
-iwalk(
+promed <- iwalk(
   sheets, function(sheet, name) {
-    x <- read_excel(infile, sheet = sheet)
+    x <- read_xlsx(infile, sheet = sheet)
     x <- clean_names(x)
-    saveRDS(x, file = glue("promed_{name}.rds"))
+    x$date_posted <- as.Date(x$date_posted)
+    saveRDS(x, glue("promed_{name}.rds"))
   }
 )
-
-
