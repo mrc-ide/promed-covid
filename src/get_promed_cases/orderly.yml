@@ -1,0 +1,15 @@
+script: script.R
+
+packages:
+- dplyr
+- glue
+- purrr
+- zip
+
+artefacts:
+
+depends:
+  get_promed_data:
+    id: latest
+    use:
+      promed_everything.zip: promed_everything.zip

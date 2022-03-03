@@ -1,0 +1,19 @@
+script: script.R
+
+packages:
+- aweek
+- dplyr
+- glue
+- janitor
+- purrr
+- snakecase
+- tidyr
+- zip
+
+artefacts:
+
+depends:
+  get_promed_data:
+    id: latest
+    use:
+      promed_everything.zip: promed_everything.zip

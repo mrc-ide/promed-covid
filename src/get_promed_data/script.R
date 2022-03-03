@@ -8,6 +8,16 @@ promed <- iwalk(
     x <- read_xlsx(infile, sheet = sheet)
     x <- clean_names(x)
     x$date_posted <- as.Date(x$date_posted)
-    saveRDS(x, glue("promed_{name}.rds"))
+    outfile <- glue("promed_{name}.rds")
+    saveRDS(x, outfile)
+    if (! file.exists("promed_everything.zip")) {
+      message("Adding first file ", outfile)
+      zip("promed_everything.zip", outfile)
+    } else {
+      message("Appending ", outfile)
+      zip_append("promed_everything.zip", outfile)
+    }
+
   }
 )
+

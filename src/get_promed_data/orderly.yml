@@ -7,6 +7,7 @@ packages:
 - purrr
 - readxl
 - snakecase
+- zip
 
 artefacts:
   data:
@@ -46,7 +47,8 @@ artefacts:
       - promed_sudan.rds
       - promed_mauritius.rds
       - promed_angola.rds
-      - promed_belgium.rds      
+      - promed_belgium.rds
+      - promed_everything.zip
 
 resources:
 - promed-covid-data.xlsx
