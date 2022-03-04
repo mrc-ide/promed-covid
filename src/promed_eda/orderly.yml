@@ -1,16 +1,30 @@
 script: script.R
 
 packages:
-- aweek
 - dplyr
+- ggplot2
 - glue
 - janitor
+- lubridate
 - purrr
 - snakecase
+- stringr
 - tidyr
 - zip
 
 artefacts:
+  - data:
+      description: ProMED posts meta-data
+      filenames:
+        - promed_eda.rds
+  - staticgraph:
+      description: ProMED posts meta-data
+      filenames:
+        - post_sources_perc.png
+        - post_sources_raw.png
+        - post_counts_raw.png
+        - promed_posts_country_dates.png
+        - promed_posts_country.png
 
 depends:
   get_promed_data:

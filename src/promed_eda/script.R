@@ -83,9 +83,11 @@ for (row in 1:nrow(nposts)) {
   }
 }
 
-nposts$week <- date2week(nposts$date_posted, floor_day = TRUE, factor = TRUE)
-nposts$country <- stringr::str_trim(nposts$country)
-nposts$country <- snakecase::to_title_case(nposts$country)
+nposts$week_posted <- glue("{year(nposts$date_posted)}-W{week(nposts$date_posted)}")
+all_weeks <- c("2019-W52", glue("2020-W{1:52}"))
+nposts$week_posted <- factor(nposts$week_posted, levels = all_weeks, ordered = TRUE)
+nposts$country <- str_trim(nposts$country)
+nposts$country <- to_title_case(nposts$country)
 
 x <- count(nposts, country)
 x <- arrange(x, n)
@@ -98,6 +100,7 @@ x$country <- factor(
 p <- ggplot(x) +
   geom_col(aes(n, country), fill = "black", alpha = 0.7) +
   theme_minimal() +
+  xlab("Number of ProMED posts") +
   theme(axis.title.y = element_blank(),
         axis.text.y = element_text(vjust = 0.5, hjust = 1),
         legend.position = "top",
@@ -289,14 +292,16 @@ nposts$post_source_category <- case_when(
   TRUE ~ "Other"
 )
 
+saveRDS(nposts, "promed_eda.rds")
 ## Number of posts per week.
-x <- count(nposts, week)
-x$week <- factor(x$week)
+x <- count(nposts, week_posted)
 
-p <- ggplot(x, aes(week, n), fill = "black") +
+
+p <- ggplot(x, aes(week_posted, n), fill = "black") +
   geom_col(alpha = 0.7) +
   ggtitle("Number of COVID-19 related ProMED Posts",
-          "in the first 7 weeks of the pandemic") +
+          "between 31st Dec 2019 and 13 Feb 2020") +
+  xlab("Number of ProMED posts") +
   theme_minimal() +
   theme(axis.title.x = element_blank(),
         axis.text.x = element_text(angle = 90, hjust = 0, vjust = 0),
@@ -305,12 +310,10 @@ p <- ggplot(x, aes(week, n), fill = "black") +
 
 ggsave("post_counts_raw.png", p)
 
-x <- count(nposts, week, post_source_category)
-x$week <- factor(x$week)
+x <- count(nposts, week_posted, post_source_category)
 
-
-p <- ggplot(x, aes(week, n, fill = post_source_category)) +
-  geom_col(position = position_dodge(), alpha = 0.7) +
+p <- ggplot(x, aes(week_posted, n, fill = post_source_category)) +
+  geom_col(alpha = 0.7) +
   scale_fill_brewer(palette = "Set1") +
   ggtitle("Source of ProMED posts") +
   theme_minimal() +
@@ -321,16 +324,17 @@ p <- ggplot(x, aes(week, n, fill = post_source_category)) +
 
 ggsave("post_sources_raw.png", p)
 
-x <- janitor::tabyl(nposts, week, post_source_category) %>%
-  janitor::adorn_percentages()
+x <- tabyl(nposts, week_posted, post_source_category) %>%
+  adorn_percentages()
 
-x <- tidyr::gather(x, post_source_category, perc, -week)
-x$week <- factor(x$week)
+x <- gather(x, post_source_category, perc, -week_posted)
+x <- x[complete.cases(x), ]
 
-p <- ggplot(x, aes(week, perc, fill = post_source_category)) +
-  geom_col(position = position_dodge(), alpha = 0.7) +
+p <- ggplot(x, aes(week_posted, perc, fill = post_source_category)) +
+  geom_col(alpha = 0.7) +
   scale_fill_brewer(palette = "Set1") +
   ggtitle("Breakdown of ProMED post sources per week") +
+  ylab("Percentage") +
   theme_minimal() +
   theme(axis.title.x = element_blank(),
         axis.text.x = element_text(angle = 90, hjust = 0, vjust = 0),
