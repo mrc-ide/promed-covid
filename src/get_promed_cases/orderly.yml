@@ -7,6 +7,10 @@ packages:
 - zip
 
 artefacts:
+  data:
+    description: Cases
+    filenames:
+      - promed_cases.rds
 
 depends:
   get_promed_data:

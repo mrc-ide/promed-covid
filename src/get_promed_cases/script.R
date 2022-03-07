@@ -10,7 +10,7 @@ names(infiles) <- gsub(
 promed <- map(infiles, readRDS)
 
 cols_to_keep <- c(
-  "id_number", "date_posted",
+  "id_number", "date_posted", "week_posted",
   "number_of_new_cases", "cumulative_cases", "number_of_suspected_cases",
   "post_source"
 )
@@ -40,5 +40,5 @@ promed_cases <- imap_dfr(
   }, .id = "country"
 )
 
-## First Imperial report published on 17th Jan
-x <- promed_cases[promed_cases$date_posted < as.Date("2020-01-17"), ]
+
+saveRDS(promed_cases, "promed_cases.rds")

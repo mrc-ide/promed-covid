@@ -8,3 +8,12 @@ packages:
 artefacts:
 
 depends:
+  get_promed_cases:
+    id: latest
+    use:
+      promed_cases.rds: promed_cases.rds
+  get_promed_data:
+    id: latest
+    use:
+      promed_everything.zip: promed_everything.zip        
+        
