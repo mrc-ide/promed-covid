@@ -7,16 +7,10 @@ names(infiles) <- gsub(
 ) %>% gsub(pattern = ".rds", replacement = "")
 
 promed <- map(infiles, readRDS)
-promed <- map(promed, function(x) {
-    x$id_number <- stringr::str_trim(x$id_number)
-    x$id_number_2 <- stringr::str_trim(x$id_number)
-    x$post_source <- stringr::str_trim(x$post_source)
-    x
-})
 
 x <- promed[["deaths"]]
-out1 <- x[ ,c("id_number", "date_posted", "country", "post_source")]
-out2 <- x[ ,c("id_number_2", "date_posted_2", "country", "post_source")]
+out1 <- x[ ,c("id_number", "date_posted", "country", "post_source", "week_posted")]
+out2 <- x[ ,c("id_number_2", "date_posted_2", "country", "post_source", "week_posted")]
 out2 <- rename(
   out2, id_number = id_number_2,
   date_posted = date_posted_2
@@ -26,8 +20,8 @@ out2 <- out2[!is.na(out2$id_number), ]
 out <- rbind(out1, out2)
 
 x <- promed[["importations"]]
-out1 <- x[ ,c("id_number", "date_posted", "from_admin_0", "post_source")]
-out2 <- x[ ,c("id_number_2", "date_posted_2", "from_admin_0", "post_source")]
+out1 <- x[ ,c("id_number", "date_posted", "from_admin_0", "post_source", "week_posted")]
+out2 <- x[ ,c("id_number_2", "date_posted_2", "from_admin_0", "post_source", "week_posted")]
 out1 <- rename(
   out1, country = from_admin_0
 )
@@ -45,8 +39,8 @@ promed <- promed[! names(promed) %in% c("deaths", "importations")]
 
 nposts <- imap_dfr(
   promed, function(x, cntry) {
-    out1 <- x[ ,c("id_number", "date_posted", "post_source")]
-    out2 <- x[ ,c("id_number_2", "date_posted_2", "post_source")]
+    out1 <- x[ ,c("id_number", "date_posted", "post_source", "week_posted")]
+    out2 <- x[ ,c("id_number_2", "date_posted_2", "post_source", "week_posted")]
     out2 <- rename(
       out2, id_number = id_number_2,
       date_posted = date_posted_2
@@ -83,7 +77,7 @@ for (row in 1:nrow(nposts)) {
   }
 }
 
-nposts$week_posted <- glue("{year(nposts$date_posted)}-W{week(nposts$date_posted)}")
+
 all_weeks <- c("2019-W52", glue("2020-W{1:52}"))
 nposts$week_posted <- factor(nposts$week_posted, levels = all_weeks, ordered = TRUE)
 nposts$country <- str_trim(nposts$country)

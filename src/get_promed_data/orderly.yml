@@ -4,9 +4,11 @@ packages:
 - dplyr
 - glue
 - janitor
+- lubridate
 - purrr
 - readxl
 - snakecase
+- stringr
 - zip
 
 artefacts:
